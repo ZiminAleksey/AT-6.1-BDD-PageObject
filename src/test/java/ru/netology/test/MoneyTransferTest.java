@@ -16,6 +16,10 @@ public class MoneyTransferTest {
     @BeforeEach
     void form() {
         open("http://localhost:9999");
+        var loginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo();
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        loginPage.validLogin(authInfo).validVerify(verificationCode);
     }
 
 
@@ -23,12 +27,8 @@ public class MoneyTransferTest {
     void shouldTransferMoneyFirstCard() {
         var testsMethods = new TestMethods();
         int value = 100;
-        var loginPage = new LoginPage();
         var donorInfo = DataHelper.getInfoSecondCard(value);
-        var authInfo = DataHelper.getAuthInfo();
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        loginPage.validLogin(authInfo).validVerify(verificationCode);
         testsMethods.updateBalanceCard();
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
@@ -47,12 +47,8 @@ public class MoneyTransferTest {
     void shouldTransferMoneySecondCard() {
         var testsMethods = new TestMethods();
         int value = 50;
-        var loginPage = new LoginPage();
         var donorInfo = DataHelper.getInfoFirstCard(value);
-        var authInfo = DataHelper.getAuthInfo();
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        loginPage.validLogin(authInfo).validVerify(verificationCode);
         testsMethods.updateBalanceCard();
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
@@ -70,13 +66,9 @@ public class MoneyTransferTest {
     @Test
     void shouldTransferMoneyCardLowAmount() {
         var testsMethods = new TestMethods();
-        var loginPage = new LoginPage();
         int value = 1;
         var donorInfo = DataHelper.getInfoFirstCard(value);
-        var authInfo = DataHelper.getAuthInfo();
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        loginPage.validLogin(authInfo).validVerify(verificationCode);
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
