@@ -18,73 +18,74 @@ public class MoneyTransferTest {
         open("http://localhost:9999");
     }
 
+
     @Test
     void shouldTransferMoneyFirstCard() {
-        var loginPage = new LoginPage();
-        var cardPage = new CardPage();
+        var testsMethods = new TestMethods();
         int value = 100;
-        var idFirstCard = DataHelper.getInfoFirstCard().getId();
-        var idSecondCard = DataHelper.getInfoSecondCard().getId();
-        var transferInfo = DataHelper.getAmountInfoSecondCard(String.valueOf(value));
+        var loginPage = new LoginPage();
+        var donorInfo = DataHelper.getInfoSecondCard(value);
         var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        verificationPage.validVerify(verificationCode);
-        cardPage.checkBalanceCard();
+        loginPage.validLogin(authInfo).validVerify(verificationCode);
+        testsMethods.updateBalanceCard();
+        var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(0).transferValueExeption(transferInfo, firstBalanceSecondCard);
+        cardPage.changeCard(0).transferValue(donorInfo);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
+        testsMethods.assertNegativeBalance();
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard + value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard - value);
     }
 
     @Test
     void shouldTransferMoneySecondCard() {
-        var loginPage = new LoginPage();
-        var cardPage = new CardPage();
+        var testsMethods = new TestMethods();
         int value = 50;
-        var transferInfo = DataHelper.getAmountInfoFirstCard(String.valueOf(value));
+        var loginPage = new LoginPage();
+        var donorInfo = DataHelper.getInfoFirstCard(value);
         var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        verificationPage.validVerify(verificationCode);
-        cardPage.checkBalanceCard();
+        loginPage.validLogin(authInfo).validVerify(verificationCode);
+        testsMethods.updateBalanceCard();
+        var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(1).transferValueExeption(transferInfo, firstBalanceFirstCard);
+        cardPage.changeCard(1).transferValue(donorInfo);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
+        testsMethods.assertNegativeBalance();
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard - value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard + value);
     }
 
     @Test
     void shouldTransferMoneyCardLowAmount() {
+        var testsMethods = new TestMethods();
         var loginPage = new LoginPage();
-        var cardPage = new CardPage();
         int value = 1;
-        var transferInfo = DataHelper.getAmountInfoFirstCard(String.valueOf(value));
+        var donorInfo = DataHelper.getInfoFirstCard(value);
         var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
 
-        verificationPage.validVerify(verificationCode);
+        loginPage.validLogin(authInfo).validVerify(verificationCode);
+        var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(1).transferValueExeption(transferInfo, firstBalanceFirstCard);
-        cardPage.assertNegativeBalance();
+        cardPage.changeCard(1).transferValue(donorInfo);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
+        testsMethods.assertNegativeBalance();
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard - value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard + value);
     }

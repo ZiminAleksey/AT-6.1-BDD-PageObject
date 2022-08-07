@@ -38,29 +38,14 @@ public class DataHelper {
     public static class CardTransfer {
         private String id;
         private String cardNumber;
+        private int amount;
     }
 
-    public static CardTransfer getInfoFirstCard() {
-        return new CardTransfer("0", "5559 0000 0000 0001");
+    public static CardTransfer getInfoFirstCard(int amount) {
+        return new CardTransfer("0", "5559 0000 0000 0001", amount);
     }
 
-    public static CardTransfer getInfoSecondCard() {
-        return new CardTransfer("1", "5559 0000 0000 0002");
+    public static CardTransfer getInfoSecondCard(int amount) {
+        return new CardTransfer("1", "5559 0000 0000 0002", amount);
     }
-
-    @Value
-    public static class AmountTransfer {
-        private String amount;
-        private String cardNumber;
-    }
-
-    public static AmountTransfer getAmountInfoFirstCard(String amount) {
-        return new AmountTransfer(amount, "5559 0000 0000 0001");
-    }
-
-    public static AmountTransfer getAmountInfoSecondCard(String amount) {
-        return new AmountTransfer(amount, "5559 0000 0000 0002");
-    }
-
-
 }

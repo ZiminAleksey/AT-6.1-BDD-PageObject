@@ -19,12 +19,7 @@ public class LoginPage {
         return new VerificationPage();
     }
 
-    public void invalidLogin(DataHelper.AuthInfo login) {
-        loginField.setValue(login.getLogin());
-        passwordField.setValue(login.getPassword());
-        loginButton.click();
+    public void checkError() {
         errorLogin.shouldHave(exactText("Ошибка! Неверно указан логин или пароль"));
     }
-
-
 }

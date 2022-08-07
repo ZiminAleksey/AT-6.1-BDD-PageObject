@@ -17,40 +17,20 @@ public class TransferValueCard {
     private SelenideElement numberCard = $("[data-test-id='from'] .input__control");
     private SelenideElement transferButton = $("[data-test-id='action-transfer']");
 
-
-    public CardPage transferValueExeption(DataHelper.AmountTransfer info, int borderBalance) {
-
+    public CardPage transferValue(DataHelper.CardTransfer info) {
         clearPage();
-        val amount = Integer.parseInt(info.getAmount());
-        if (borderBalance >= amount) {
-            amountTransfer.setValue(info.getAmount());
-        } else {
-            throw new RuntimeException("Баланс карты, с которой осуществляется перевод недостаточен");
+        amountTransfer.setValue(String.valueOf(info.getAmount()));
+        numberCard.setValue(info.getCardNumber());
+        transferButton.click();
+        return new CardPage();
+    }
+
+    public void checkBalance(DataHelper.CardTransfer info, int donorCard) {
+        val value = info.getAmount();
+        if (donorCard < value | donorCard < 0) {
+            throw new RuntimeException("На карте № " + info.getCardNumber() + " недостаточно средств");
         }
-        numberCard.setValue(info.getCardNumber());
-        transferButton.click();
-        return new CardPage();
-    }
-
-    public CardPage transferValue(DataHelper.AmountTransfer info) {
-        clearPage();
-        assertForm();
-        amountTransfer.setValue(info.getAmount());
-        numberCard.setValue(info.getCardNumber());
-        transferButton.click();
-        return new CardPage();
-    }
-
-
-    public void assertForm() {
-        amountTransfer.shouldHave(Condition.exactValue(""));
-        numberCard.shouldHave(Condition.exactValue(""));
-    }
-
-    public void updateBalanceCard(String amount, String cardNumber) {
-        amountTransfer.setValue(amount);
-        numberCard.setValue(cardNumber);
-        transferButton.click();
+        transferValue(info);
     }
 
     private void clearPage() {
@@ -59,7 +39,6 @@ public class TransferValueCard {
         numberCard.sendKeys(Keys.CONTROL + "A");
         numberCard.sendKeys(BACK_SPACE);
     }
-
 }
 
 
