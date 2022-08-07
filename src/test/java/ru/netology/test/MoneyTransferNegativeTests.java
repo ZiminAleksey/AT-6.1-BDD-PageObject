@@ -29,8 +29,7 @@ public class MoneyTransferNegativeTests {
 
         loginPage.validLogin(authInfo).validVerify(verificationCode);
         var cardPage = new CardPage();
-        int firstBalanceSecondCard = cardPage.getCardBalance("1");
-        cardPage.changeCard(0).checkBalance(donorInfo, firstBalanceSecondCard);
+        cardPage.changeCard(0).checkBalance(donorInfo);
         testsMethods.assertNegativeBalance();
     }
 

@@ -1,6 +1,7 @@
 package ru.netology.page;
 
-import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.*;
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
@@ -16,6 +17,7 @@ public class TransferValueCard {
     private SelenideElement amountTransfer = $("[data-test-id='amount'] .input__control");
     private SelenideElement numberCard = $("[data-test-id='from'] .input__control");
     private SelenideElement transferButton = $("[data-test-id='action-transfer']");
+    private SelenideElement errorMessage = $("[data-test-id=error-notification]");
 
     public CardPage transferValue(DataHelper.CardTransfer info) {
         clearPage();
@@ -25,12 +27,9 @@ public class TransferValueCard {
         return new CardPage();
     }
 
-    public void checkBalance(DataHelper.CardTransfer info, int donorCard) {
-        val value = info.getAmount();
-        if (donorCard < value | donorCard < 0) {
-            throw new RuntimeException("На карте № " + info.getCardNumber() + " недостаточно средств");
-        }
+    public void checkBalance(DataHelper.CardTransfer info) {
         transferValue(info);
+        errorMessage.shouldHave(exactText("На карте № " + info.getCardNumber() + " недостаточно средств")).shouldBe(visible);
     }
 
     private void clearPage() {
