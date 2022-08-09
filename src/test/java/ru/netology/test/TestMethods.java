@@ -16,30 +16,15 @@ public class TestMethods {
         val firstBalanceCard = cardPage.getCardBalance("0");
         val secondBalanceCard = cardPage.getCardBalance("1");
         val alignmentBalance = firstBalanceCard - ((firstBalanceCard + secondBalanceCard) / 2);
-        var firstCardInfo = DataHelper.getInfoFirstCard(alignmentBalance);
-        var secondCardInfo = DataHelper.getInfoSecondCard(alignmentBalance);
+        var firstCardInfo = DataHelper.getInfoFirstCard();
+        var secondCardInfo = DataHelper.getInfoSecondCard();
 
         if (firstBalanceCard > secondBalanceCard) {
             cardPage.changeCard(1);
-            transferValueCard.transferValue(firstCardInfo);
+            transferValueCard.transferValue(firstCardInfo, alignmentBalance);
         } else {
             cardPage.changeCard(0);
-            transferValueCard.transferValue(secondCardInfo);
+            transferValueCard.transferValue(secondCardInfo, alignmentBalance);
         }
     }
-
-    public void assertNegativeBalance() {
-
-        var cardPage = new CardPage();
-        int secondBalanceFirstCard = cardPage.getCardBalance("0");
-        int secondBalanceSecondCard = cardPage.getCardBalance("1");
-        assertTrue(secondBalanceFirstCard > 0 && secondBalanceSecondCard > 0);
-    }
-
-    public void assertLogin() {
-
-        var loginPage = new LoginPage();
-        loginPage.checkError();
-    }
-
 }

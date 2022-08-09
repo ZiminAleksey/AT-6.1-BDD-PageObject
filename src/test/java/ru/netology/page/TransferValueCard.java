@@ -19,16 +19,16 @@ public class TransferValueCard {
     private SelenideElement transferButton = $("[data-test-id='action-transfer']");
     private SelenideElement errorMessage = $("[data-test-id=error-notification]");
 
-    public CardPage transferValue(DataHelper.CardTransfer info) {
+    public CardPage transferValue(DataHelper.CardTransfer info, int value) {
         clearPage();
-        amountTransfer.setValue(String.valueOf(info.getAmount()));
+        amountTransfer.setValue(String.valueOf(value));
         numberCard.setValue(info.getCardNumber());
         transferButton.click();
         return new CardPage();
     }
 
-    public void checkBalance(DataHelper.CardTransfer info) {
-        transferValue(info);
+    public void checkBalance(DataHelper.CardTransfer info, int value) {
+        transferValue(info, value);
         errorMessage.shouldHave(exactText("На карте № " + info.getCardNumber() + " недостаточно средств")).shouldBe(visible);
     }
 

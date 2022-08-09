@@ -27,18 +27,18 @@ public class MoneyTransferTest {
     void shouldTransferMoneyFirstCard() {
         var testsMethods = new TestMethods();
         int value = 100;
-        var donorInfo = DataHelper.getInfoSecondCard(value);
+        var donorInfo = DataHelper.getInfoSecondCard();
 
         testsMethods.updateBalanceCard();
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(0).transferValue(donorInfo);
+        cardPage.changeCard(0).transferValue(donorInfo, value);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
-        testsMethods.assertNegativeBalance();
+        assertTrue(secondBalanceFirstCard > 0 && secondBalanceSecondCard > 0);
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard + value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard - value);
     }
@@ -47,37 +47,37 @@ public class MoneyTransferTest {
     void shouldTransferMoneySecondCard() {
         var testsMethods = new TestMethods();
         int value = 50;
-        var donorInfo = DataHelper.getInfoFirstCard(value);
+        var donorInfo = DataHelper.getInfoFirstCard();
 
         testsMethods.updateBalanceCard();
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(1).transferValue(donorInfo);
+        cardPage.changeCard(1).transferValue(donorInfo, value);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
-        testsMethods.assertNegativeBalance();
+        assertTrue(secondBalanceFirstCard > 0 && secondBalanceSecondCard > 0);
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard - value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard + value);
     }
 
     @Test
     void shouldTransferMoneyCardLowAmount() {
-        var testsMethods = new TestMethods();
+
         int value = 1;
-        var donorInfo = DataHelper.getInfoFirstCard(value);
+        var donorInfo = DataHelper.getInfoFirstCard();
 
         var cardPage = new CardPage();
         int firstBalanceFirstCard = cardPage.getCardBalance("0");
         int firstBalanceSecondCard = cardPage.getCardBalance("1");
 
-        cardPage.changeCard(1).transferValue(donorInfo);
+        cardPage.changeCard(1).transferValue(donorInfo, value);
         int secondBalanceFirstCard = cardPage.getCardBalance("0");
         int secondBalanceSecondCard = cardPage.getCardBalance("1");
 
-        testsMethods.assertNegativeBalance();
+        assertTrue(secondBalanceFirstCard > 0 && secondBalanceSecondCard > 0);
         assertEquals(secondBalanceFirstCard, firstBalanceFirstCard - value);
         assertEquals(secondBalanceSecondCard, firstBalanceSecondCard + value);
     }
